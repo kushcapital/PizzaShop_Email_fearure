@@ -1,0 +1,164 @@
+﻿@* Author: Rajeev kushwaha *@
+
+@model PizzaShop.Models.Order
+
+@{
+    ViewData["Title"] = "Online Pizza Shop";
+    // Define lists for options
+    var pizzaSizes = new List<SelectListItem> {
+        new SelectListItem { Value = "Small", Text = "Small: $4.99" },
+        new SelectListItem { Value = "Medium", Text = "Medium: $5.99" },
+        new SelectListItem { Value = "Large", Text = "Large: $6.99" },
+        new SelectListItem { Value = "X-Large", Text = "X-Large: $7.99" }
+    };
+
+    var pizzaTypes = new List<SelectListItem> {
+        new SelectListItem { Value = "Thin Crust", Text = "Thin Crust" },
+        new SelectListItem { Value = "Pan", Text = "Pan" },
+        new SelectListItem { Value = "Hand-Toss", Text = "Hand-Toss" }
+    };
+
+    var toppings = new List<string> {
+        "Tomato", "Green pepper", "Black Olives", "Pine Apple",
+        "Mushrooms", "Pepproni", "Sausage"
+    };
+}
+
+<style>
+
+    .field-validation-error {
+        color: red;
+        font-weight: bold;
+        display: block;
+    }
+
+    .input-validation-error {
+        border: 1px solid red;
+    }
+
+
+    .options-row {
+        display: block;
+        margin-bottom: 15px;
+        font-size: 0;
+    }
+
+
+    .options-container {
+        border: 1px solid #ccc;
+        padding: 10px 15px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        display: inline-block;
+        vertical-align: top;
+        min-width: 190px;
+        min-height: 180px;
+        font-size: 1rem;
+    }
+
+        .options-container h5 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .options-container div {
+            margin-bottom: 5px;
+        }
+
+    label {
+        margin-right: 5px;
+    }
+
+    .form-section {
+        margin-bottom: 20px;
+        clear: both;
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 600px;
+        min-height: 100px;
+    }
+
+    .button-group button {
+        margin-right: 10px;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+        margin-right: 5px;
+    }
+
+</style>
+
+<h2>Welcome to Cyber online Pizza Shop</h2>
+
+<form asp-action="Index" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="options-row">
+        <div class="options-container">
+            <h5>Each Topping $0.99</h5>
+            @foreach (var topping in toppings)
+            {
+                <div>
+                    <input type="checkbox" name="Toppings" value="@topping" id="topping_@topping"
+                    @(Model.Toppings != null && Model.Toppings.Contains(topping) ? "checked" : "") />
+                    <label for="topping_@topping">@topping</label>
+                </div>
+            }
+        </div>
+
+        <div class="options-container">
+            <h5>Pizza Size (select one):</h5>
+            @foreach (var size in pizzaSizes)
+            {
+                <div>
+                    <input type="radio" asp-for="PizzaSize" value="@size.Value" id="size_@size.Value" />
+                    <label for="size_@size.Value">@size.Text</label>
+                </div>
+            }
+            <span asp-validation-for="PizzaSize" class="field-validation-error"></span>
+        </div>
+
+        <div class="options-container">
+            <h5>Pizza Type (select one):</h5>
+            @foreach (var type in pizzaTypes)
+            {
+                <div>
+                    <input type="radio" asp-for="PizzaType" value="@type.Value" id="type_@type.Value" />
+                    <label for="type_@type.Value">@type.Text</label>
+                </div>
+            }
+            <span asp-validation-for="PizzaType" class="field-validation-error"></span>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <input type="checkbox" asp-for="SendEmailConfirmation" />
+        <label asp-for="SendEmailConfirmation"></label>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" type="email" />
+        <span asp-validation-for="Email" class="field-validation-error"></span>
+    </div>
+
+    <div class="form-section">
+        <label>Your order:</label>
+        <textarea asp-for="OrderSummary" readonly="readonly"></textarea>
+    </div>
+
+    <div class="button-group">
+        <button type="submit" name="myButton" value="PreCompute" class="btn btn-primary">PreCompute Order</button>
+        <button type="submit" name="myButton" value="Clear" class="btn btn-secondary" formnovalidate>Clear Order</button>
+        <button type="submit" name="myButton" value="PlaceOrder" class="btn btn-primary">Place Order</button>
+    </div>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
