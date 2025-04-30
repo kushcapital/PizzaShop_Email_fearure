@@ -189,8 +189,8 @@ namespace PizzaShop.Controllers
         private bool SendOrderConfirmationEmail(string recipientEmail, string subject, string body)
         {
       
-            string senderEmail = "rajeev0458@gmail.com";     
-            string senderPassword = "jymf ulyy uovx qiji ";     
+            string senderEmail = "examples@gmail.com";     
+            string senderPassword = "##### ";     
             string senderDisplayName = "Cyber Pizza Shop";          
 
             // Basic check for placeholder credentials
